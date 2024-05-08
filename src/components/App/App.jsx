@@ -7,6 +7,7 @@ import css from "../App/App.module.css";
 import ContactForm from "../ContactForm/ContactForm";
 import ContactList from "../ContactList/ContactList";
 import SearchBox from "../SearchBox/SearchBox";
+import { number } from "prop-types";
 
 const initialState = [
   { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
@@ -20,18 +21,14 @@ function App() {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    const saveContactData = localStorage.setItem(
-      "saveContactData",
-      JSON.stringify(contacts)
-    );
-    const loadContactData = JSON.parse(localStorage.getItem("saveContactData"));
-
-    // if () {
-
-    // }
-
-    console.log("ok", loadContactData);
-  }, [contacts]);
+    const savedContacts = JSON.parse(localStorage.getItem("saveContacts"));
+    if (savedContacts && savedContacts.length > 0) {
+      setContacts(savedContacts);
+    } else {
+      setContacts(initialState);
+      localStorage.setItem("saveContacts", JSON.stringify(initialState));
+    }
+  }, []);
 
   const handleFilterChange = (e) => {
     e.preventDefault();
@@ -46,21 +43,31 @@ function App() {
   };
 
   const handleSubmitForm = (values, actions) => {
-    const newContact = {
-      id: nanoid(),
-      name: values.name,
-      number: values.number,
-    };
+    const newContacts = [
+      ...contacts,
+      {
+        id: nanoid(),
+        name: values.name,
+        number: values.number,
+      },
+    ];
 
-    setContacts(() => [...contacts, newContact]);
+    setContacts(newContacts);
+
+    saveContactsToLocalStorage(newContacts);
 
     actions.resetForm();
   };
 
+  const saveContactsToLocalStorage = (contacts) => {
+    localStorage.setItem("saveContacts", JSON.stringify(contacts));
+  };
+
   const handleDeleteContact = (id) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== id)
-    );
+    const updatedContacts = contacts.filter((contact) => contact.id !== id);
+
+    setContacts(updatedContacts);
+    localStorage.setItem("saveContacts", JSON.stringify(updatedContacts));
   };
 
   return (
