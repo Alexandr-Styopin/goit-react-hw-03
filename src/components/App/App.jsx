@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+
 import { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
-
 import css from "../App/App.module.css";
 
 import ContactForm from "../ContactForm/ContactForm";

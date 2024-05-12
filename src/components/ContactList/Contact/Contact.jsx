@@ -1,6 +1,6 @@
-export default function Contact({ contacts, onDelete }) {
-  return contacts.map(({ id, name, number }) => (
-    <li key={id}>
+export default function Contact({ contact: { id, name, number }, onDelete }) {
+  return (
+    <li>
       <p>{name}</p>
       <p>{number}</p>
       <button
@@ -12,5 +12,5 @@ export default function Contact({ contacts, onDelete }) {
         Delete
       </button>
     </li>
-  ));
+  );
 }
